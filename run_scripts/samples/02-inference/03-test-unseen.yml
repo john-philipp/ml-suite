@@ -1,0 +1,10 @@
+# BINDINGS:
+neighbors: 16
+points: 1000
+---
+bindings_str: points:{{points}}:int neighbors:{{neighbors}}:int
+---
+actions:
+  - model test -b {{bindings_str}} --inference-only -d2
+  - model test -b {{bindings_str}} -d2
+  - model build-predictions -d2

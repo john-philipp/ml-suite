@@ -1,0 +1,8 @@
+# BINDINGS:
+tps: 1
+
+---
+actions:
+  # We access last two datasets built.
+  - model prepare --seq-tps {{tps}} --seq-end -1 -d-1
+  - model prepare --seq-tps {{tps}} --seq-end -1 -d-2

@@ -1,0 +1,15 @@
+# BINDINGS:
+# Sample data config:
+bins_n: 200
+epsilon: 0.1
+
+# Points == grid_size ^ 2.
+grid_size: 100
+---
+
+#
+actions:
+
+  # We build two datasets. One to train, one to verify against.
+  - model build-sample-data -b bins_n:{{bins_n}}:int epsilon:{{epsilon}}:float grid_size:{{grid_size}}:int
+  - model build-sample-data -b bins_n:{{bins_n}}:int epsilon:{{epsilon}}:float grid_size:{{grid_size}}:int

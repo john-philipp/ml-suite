@@ -1,0 +1,33 @@
+# An example of a simple scripted workflow complete with bindings.
+
+# Run as (e.g.):
+#  mls scripts run -s run_scripts/samples/00-simple-workflow/_run.yml -b training_cycles:3:int epochs_per_cycle:10:int
+
+# BINDINGS:
+training_cycles: 1
+epochs_per_cycle: 1
+---
+
+actions:
+
+  # Build some sample data to train on.
+  - model build-sample-data
+
+  # Prepares latest data for training.
+  - model prepare --seq-end -1
+
+  # Set up empty training and train once.
+  - misc echo -m "Starting cycle 1/{{training_cycles}}..."
+  - model train -e{{epochs_per_cycle}}
+
+  # Train into latest training.
+  {% for i in range(1, training_cycles) %}
+  - misc echo -m "Starting cycle {{i + 1}}/{{training_cycles}}..."
+  - model train -e{{epochs_per_cycle}} -i
+  {% endfor %}
+
+  # Finally, test against sparse split, build predictions, and visualise.
+  - model test -s sparse -p -v
+
+  # And collect results.
+  - results collect

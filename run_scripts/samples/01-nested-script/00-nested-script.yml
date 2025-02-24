@@ -1,0 +1,2 @@
+actions:
+  - misc echo -m "Running inner script."

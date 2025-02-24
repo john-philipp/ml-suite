@@ -1,0 +1,77 @@
+dataset:
+  name: SemanticKITTI
+  dataset_path:  "{{dataset_path}}"
+  cache_dir: "{{training_path}}/randlanet/logs/cache"
+  # In absolute numbers.
+  class_weights: [
+    0,  # car
+    0,  # bicycle
+    0,  # motorcycle
+    0,  # truck
+    0,  # other-vehicle
+    0,  # person
+    0,  # bicyclist
+    0,  # motorcyclist
+    0,  # road
+    0,  # parking
+    0,  # sidewalk
+    0,  # other-ground
+    0,  # building
+    0,  # fence
+    0,  # vegetation
+    0,  # trunk
+    0,  # terrain
+    0,  # pole
+    0   # traffic-sign
+  ]
+  test_result_folder: "{{training_path}}/randlanet/test"
+  test_split: []
+  training_split: []
+  all_split: ['.full']
+  validation_split: []
+  use_cache: true
+  sampler:
+    name: 'SemSegRandomSampler'
+model:
+  name: RandLANet
+  batcher: DefaultBatcher
+  ckpt_path: # path/to/your/checkpoint
+  num_neighbors: 16
+  num_layers: 4
+#  num_points: 45056
+  num_points: 4000
+  num_classes: 19
+  ignored_label_inds: [0]
+  sub_sampling_ratio: [4, 4, 4, 4]
+  # Input channels available in raw data (dim + features). E.g. 4 (xyz + i).
+  # In: site-packages/open3d/_ml3d/datasets/semantickitti.py:283ff
+  # data = {
+  #   'point': points[:, 0:3],
+  #   'feat': points[:, 3:],  # None if no intensity.
+  #   'label': labels,
+  # }
+  in_channels: 4  # 4 if adding intensity.
+  dim_features: 8
+  dim_output: [16, 64, 128, 256]
+  grid_size: 0.06
+#  augment:
+#    recenter:
+#      dim: [0, 1]
+pipeline:
+  name: SemanticSegmentation
+  optimizer:
+    lr: 0.001
+  batch_size: 4
+  main_log_dir: "{{training_path}}/randlanet/logs"
+  # This is overridden by arg --epochs.
+  max_epoch: 10
+  save_ckpt_freq: 1
+  scheduler_gamma: 0.9886
+  test_batch_size: 1
+  train_sum_dir: "{{training_path}}/randlanet/train_log"
+  val_batch_size: 2
+  summary:
+    record_for: []
+    max_pts:
+    use_reference: false
+    max_outputs: 1

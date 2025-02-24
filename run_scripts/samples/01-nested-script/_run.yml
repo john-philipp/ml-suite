@@ -1,0 +1,2 @@
+actions:
+  - scripts run -s run_scripts/00-test/script-2.yml

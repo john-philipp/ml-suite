@@ -1,0 +1,63 @@
+# BINDINGS:
+# Special vars:
+# _[min,max]_[x,y,z]
+resolution:     0.1
+grid_size:      100
+epsilon:        0.0
+bins_n:         200
+dt:             0.1
+
+label_ground:   49
+label_wall:     51
+
+fov_init_pos:   [0.3, 0.3, 0.3]
+fov_init_dir:   [0.1, 0.1, 0.0]
+fov_distance:   15
+fov_degrees:    120
+
+pc_colour:      [0, 1, 0]
+
+---
+wall_height:    {{ grid_size // 10 }}
+min_x:          {{ -grid_size // 2 }}
+max_x:          {{  grid_size // 2 }}
+min_y:          {{ -grid_size // 2 }}
+max_y:          {{  grid_size // 2 }}
+
+---
+objects:
+  - desc:       "Ground plate"
+    type:       solid-rectangle
+    args:
+      x_0:      [ {{ min_x }}, {{ min_y }}, {{ 0 }} ]
+      x_1:      [ {{ max_x }}, {{ max_y }}, {{ 0 }} ]
+    label:      {{ label_ground }}
+    intensity:  0.0
+  - desc:       "Left Wall"
+    type:       solid-rectangle
+    args:
+      x_0:      [ {{ min_x }}, {{ min_y }}, {{ 0 }} ]
+      x_1:      [ {{ min_x }}, {{ max_y }}, {{ wall_height }} ]
+    label:      {{ label_wall }}
+    intensity:  0.0
+  - desc:       "Right Wall"
+    type:       solid-rectangle
+    args:
+      x_0:      [ {{ max_x }}, {{ min_y }}, {{ 0 }} ]
+      x_1:      [ {{ max_x }}, {{ max_y }}, {{ wall_height }} ]
+    label:      18  #{{ label_wall }}
+    intensity:  1.0
+  - desc:       "Front Wall"
+    type:       solid-rectangle
+    args:
+      x_0:      [ {{ min_x }}, {{ min_y }}, {{ 0 }} ]
+      x_1:      [ {{ max_x }}, {{ min_y }}, {{ wall_height }}]
+    label:      {{ label_wall }}
+    intensity:  0.0
+  - desc:       "Rear Wall"
+    type:       solid-rectangle
+    args:
+      x_0:      [ {{ min_x }}, {{ max_y }}, {{ 0 }} ]
+      x_1:      [ {{ max_x }}, {{ max_y }}, {{ wall_height }} ]
+    label:      {{ label_wall }}
+    intensity:  0.0

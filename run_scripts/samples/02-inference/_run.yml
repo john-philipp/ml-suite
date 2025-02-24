@@ -1,0 +1,33 @@
+# BINDINGS:
+#cycles: 10
+#points_: [1024, 2048, 4096, 8192, 16384]
+#epsilons: [0.1, 0.5, 1.0]
+#neighbors_: [8, 16, 32]
+cycles: 10
+points_: [1024]
+epsilons: [0.5]
+neighbors_: [16]
+
+bins_n: 200
+grid_size: 100
+---
+bindings_str:
+---
+actions:
+  - scripts run -s run_scripts/02-sample-inference/00-build-or-restore.yml -b clean:true:bool
+  {% for epsilon in epsilons %}
+  - scripts run -s run_scripts/02-sample-inference/00-build-or-restore.yml -b build:true:bool bins_n:{{bins_n}}:int epsilon:{{epsilon}}:float grid_size:{{grid_size}}:int
+  {% for points in points_ %}
+  {% for neighbors in neighbors_ %}
+  - scripts run -s run_scripts/02-sample-inference/01-prepare.yml
+  {% for cycle in range(cycles) %}
+  - misc echo -m "Starting cycle {{cycle + 1}}/{{cycles}}..."
+  {% if cycle == 0 %}
+  - scripts run -s run_scripts/02-sample-inference/02-train-and-inference.yml -b points:{{points}}:int neighbors:{{neighbors}}:int epsilon:{{epsilon}}:float
+  {% else %}
+  - scripts run -s run_scripts/02-sample-inference/02-train-and-inference.yml -b points:{{points}}:int neighbors:{{neighbors}}:int epsilon:{{epsilon}}:float train_into:true:bool
+  {% endif %}
+  {% endfor %}
+  {% endfor %}
+  {% endfor %}
+  {% endfor %}

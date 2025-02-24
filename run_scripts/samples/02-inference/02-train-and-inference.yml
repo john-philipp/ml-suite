@@ -1,0 +1,17 @@
+# BINDINGS:
+epochs_per_cycle: 1
+train_into: false
+neighbors: 16
+points: 1024
+---
+actions:
+  # We train into the first of the last two datasets built (-d-2).
+  # Then test against the most recent one (-d-1).
+  {% if train_into %}
+  - model train -b points:{{points}}:int neighbors:{{neighbors}}:int -d-2 --epochs {{epochs_per_cycle}} --train-into
+  {% else %}
+  - model train -b points:{{points}}:int neighbors:{{neighbors}}:int -d-2 --epochs {{epochs_per_cycle}}
+  {% endif %}
+  - model test -b points:{{points}}:int neighbors:{{neighbors}}:int -d-1 --inference-only -n 10
+  - model test -b points:{{points}}:int neighbors:{{neighbors}}:int -d-1 --split test -n 10
+  - model build-predictions -d-1

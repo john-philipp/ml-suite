@@ -1,0 +1,15 @@
+.idea
+*.iml
+*.pyc
+*.git
+
+_generated
+.results
+.snapshots
+
+**/vcs.xml
+**/misc.xml
+**/modules.xml
+**/workspace.xml
+
+.pytest_cache
