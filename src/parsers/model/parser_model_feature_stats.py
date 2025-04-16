@@ -13,8 +13,37 @@ class ParserModelFeatureStats(_Parser):
 
         parser.add_argument(
             "--dataset-index", "-d",
-            help="Label this dataset (-1 == latest) (default=%(default)s).",
+            help="Analyse this dataset (-1 == latest) (default=%(default)s).",
             default=-1,
+            type=int)
+
+        parser.add_argument(
+            "--sequence-index", "-s",
+            help="Analyse this sequence (-1 == .full, -2 == .sparse) (default=%(default)s).",
+            default=-1,
+            type=int)
+
+        parser.add_argument(
+            "--feature-dims", "-f",
+            help="Feature dims in data.",
+            default=1,
+            type=int)
+
+        parser.add_argument(
+            "--coord-dims", "-c",
+            help="Coord dims in data.",
+            default=3,
+            type=int)
+
+        parser.add_argument(
+            "--live-plot", "-p",
+            help="Display plot.",
+            action="store_true")
+
+        parser.add_argument(
+            "--threads", "-t",
+            help="Use n threads.",
+            default=8,
             type=int)
 
         return parser

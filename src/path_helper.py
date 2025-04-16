@@ -126,6 +126,8 @@ class PathHelper:
     def sequence(self, i=-1):
         if i == -1:
             self.push(".full")
+        elif i == -2:
+            self.push(".sparse")
         else:
             self.push(f"{i:02d}")
         return self

@@ -29,9 +29,14 @@ class BinDataReader(_IDataReader):
         self.update_sequence(sequence_path)
         try:
             bin_path = os.path.join(self.bin_dir, self.bin_list[data_index])
-            bin_data = np.fromfile(bin_path, dtype=np.float32)
             # Note: This assumes 4D data. Might want to make this flexible?
-            bin_data.resize(int(len(bin_data) / 4), 4)
-            return bin_data
+            return self.read_bin_data(bin_path, feature_dims=1, coord_dims=3)
         except IndexError:
             raise EndOfSequenceError()
+
+    @staticmethod
+    def read_bin_data(bin_path, feature_dims=1, coord_dims=3):
+        bin_data = np.fromfile(bin_path, dtype=np.float32)
+        total_dims = coord_dims + feature_dims
+        bin_data.resize(int(len(bin_data) / total_dims), total_dims)
+        return bin_data
