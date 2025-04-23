@@ -39,4 +39,10 @@ class ParserDataConvert(_Parser):
             default=False,
             action="store_true")
 
+        parser.add_argument(
+            "--no-reduce",
+            help="Don't reduce recording based on actual records used.",
+            default=False,
+            action="store_true")
+
         return parser

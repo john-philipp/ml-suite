@@ -30,6 +30,7 @@ class HandlerDataConvert(_Handler):
             self.data_format = args.data_format
             self.pose_topic = args.pose_topic
             self.bin_topic = args.bin_topic
+            self.reduce = not args.no_reduce
             self.rn_full = True
 
     def handle(self):
@@ -85,17 +86,22 @@ class HandlerDataConvert(_Handler):
             poses_to_rm = set(x for x in all_poses if x not in poses_to_keep)
 
             total_rm = len(bins_to_rm) + len(poses_to_rm)
-            if total_rm > 0:
+
+            if args.reduce and total_rm > 0:
+
+                def remove(path, files):
+                    progress = tqdm(total=len(files))
+                    for file in files:
+                        file_path = pj(path, file)
+                        if os.path.exists(file_path):
+                            os.remove(file_path)
+                        progress.update(1)
+                    progress.n = progress.total
+                    progress.close()
+
                 log.info("Removing unnecessary files...")
-                pbar = tqdm(total=total_rm)
-                for bin_ in bins_to_rm:
-                    os.remove(pj(src_bin_dir, bin_))
-                    pbar.update(1)
-                for pose_ in poses_to_rm:
-                    os.remove(pj(src_pose_dir, pose_))
-                    pbar.update(1)
-                pbar.n = pbar.total
-                pbar.close()
+                remove(src_bin_dir, bins_to_rm)
+                remove(src_pose_dir, poses_to_rm)
 
             file_log.log(f"Bins(rm):\t{len(all_bins)}({len(bins_to_rm)})")
             topics["bin_count"] = len(all_bins) - len(bins_to_rm)
