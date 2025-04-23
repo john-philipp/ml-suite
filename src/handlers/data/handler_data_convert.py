@@ -229,12 +229,13 @@ class HandlerDataConvert(_Handler):
         bins.sort()
         poses.sort()
 
-        # For each bin. Look for pose closest. First pose should be less than first bin.
+        # For each bin. Look for pose closest.
+        # First pose should be less than first bin.
         # Find first bin lower than first pose.
         bin_start = 0
         while True:
             try:
-                if bins[bin_start] >= poses[0]:
+                if bins[bin_start + 1] >= poses[0]:
                     break
             except IndexError:
                 raise ValueError("Couldn't find any bins later than first pose.")
