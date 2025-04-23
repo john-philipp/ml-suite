@@ -1,7 +1,7 @@
+from src.handlers.model.handler_model_label import HandlerModelLabel
 from src.parsers.enums import DataFormatType, ArchitectureType
 from src.parsers.interfaces import _Args
 from src.handlers.interfaces import _Handler
-from src.handlers.model import HandlerModelLabel
 
 
 class HandlerVisualiseDataset(_Handler):
