@@ -1,3 +1,4 @@
+import os
 import sys
 
 from src.parsers.interfaces import _Args
@@ -52,6 +53,8 @@ class HandlerScriptsRun(_Handler):
                 script_path = "stdin"
                 yaml_string = script.data
             if GLOBALS.nested_level == 0:
+                if os.path.isdir(script_path):
+                    script_path += "/_run.yml"
                 mark_path(".", "script", uid="_".join(script_path.split("/")[1:]), truncate=None)
 
             script = JinjaYamlLoader(script_path, HandlerScriptsRun.Script).load(yaml_string=yaml_string, **bindings)

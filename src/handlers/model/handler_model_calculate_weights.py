@@ -133,6 +133,8 @@ class HandlerModelCalculateWeights(_Handler):
     def read_dataset_index_range(datasets, string):
         max_dataset = max(datasets)
         min_dataset = min(datasets)
+        dataset_indexes = list(datasets.keys())
+        dataset_indexes.sort()
         selected = set()
 
         parts = string.split(",")
@@ -150,6 +152,11 @@ class HandlerModelCalculateWeights(_Handler):
                 end_index = int(sub_parts[1] or max_dataset)
                 for i in range(start_index, end_index + 1):
                     selected.add(i)
+
+        for x in selected:
+            if x < 0:
+                selected.remove(x)
+                selected.add(dataset_indexes[x])
 
         return selected
 

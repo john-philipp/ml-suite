@@ -1,0 +1,12 @@
+# BINDINGS:
+# Sample data. Based on 1080p display (:zoom:up:right|from-file), see docs.
+# Pass as binding: --bindings-kvp screenshot_config::-10:0:0:str
+screenshot_config: ":-4:0:0"
+start: 1
+end: 10
+
+---
+actions:
+  {% for i in range(start, end + 1) %}
+  - visualise predictions -p {{i}} -t -s {{screenshot_config}}
+  {% endfor %}

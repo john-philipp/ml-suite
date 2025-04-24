@@ -7,8 +7,8 @@ epsilon:        0.0
 bins_n:         200
 dt:             0.1
 
-label_ground:   49
-label_wall:     51
+label_ground:   30
+label_wall:     70
 
 fov_init_pos:   [0.3, 0.3, 0.3]
 fov_init_dir:   [0.1, 0.1, 0.0]

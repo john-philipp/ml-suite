@@ -8,7 +8,7 @@ from src.parsers.interfaces import _Args
 from src.file_logger import FileLogger
 from src.handlers.interfaces import _Handler
 from src.methods import try_read_env_var, run_bash, round_float, get_dir_size, \
-    count_labels, read_screenshot_config, screenshotter
+    count_labels, read_screenshot_config, screenshotter, kill_process
 from src.path_handler import PathHandler
 from src.this_env import GLOBALS
 
@@ -24,6 +24,7 @@ class HandlerModelLabel(_Handler):
             self.data_format = args.data_format
             self.write_screenshot_config = args.write_screenshot_config
             self.take_screenshot = args.take_screenshot
+            self.kill_after = args.kill_after
 
     def handle(self):
         args: HandlerModelLabel.Args = self.args
@@ -58,11 +59,19 @@ class HandlerModelLabel(_Handler):
 
         screenshot_thread = None
         if args.take_screenshot:
-            zoom, up, right = read_screenshot_config(args.screenshot_config, screenshot_config_path)
+            zoom, up, right = read_screenshot_config(args.screenshot_config, screenshot_config_path, file_log.log)
             screenshot_thread = threading.Thread(target=screenshotter, args=(file_log, zoom, up, right))
             screenshot_thread.start()
 
         sequence_path = f"{dataset_path}/dataset/sequences/.full"
+
+        try:
+            if args.kill_after:
+                file_log.log(f"Will kill process in {args.kill_after}s...")
+                kill_thread = threading.Thread(target=kill_process, args=("labeler", args.kill_after, True, file_log.log))
+                kill_thread.start()
+        except AttributeError:
+            pass
 
         run_bash(
             f"./labeler --open-dir {os.getcwd()}/{sequence_path}",

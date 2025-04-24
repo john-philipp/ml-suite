@@ -126,7 +126,7 @@ class _TrainerOpen3dMlRandlanet(ITrainer):
 
         # Try to find weights.
         class_weights = []  # Will use semantic kitti defaults in open3d-ml.
-        if args.weights_index and args.weights_index != -1:
+        if args.weights_index:
             class_weights_dir = PathHelper().generated().weights().index(args.weights_index).path()
 
             # Implicit assumption. First file. Might need extending later.

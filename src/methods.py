@@ -432,7 +432,24 @@ def activate_window(window_id):
     return run_bash(f"xdotool windowactivate {window_id}")
 
 
-def kill_process(process_name):
+def wait_for_process(process_name, interval_s=0.5):
+    found = False
+    while not found:
+        found, _ = check_output("pgrep", process_name)
+        sleep(interval_s)
+
+
+def kill_process(process_name, in_seconds=None, wait=False, log=None):
+    if wait:
+        if log:
+            log(f"Waiting for process: {process_name}")
+        wait_for_process(process_name)
+    if in_seconds:
+        if log:
+            log(f"Waiting to kill process: {process_name}")
+        sleep(in_seconds)
+    if log:
+        log(f"Killing process: {process_name}")
     return check_output("pkill", process_name)
 
 
@@ -525,16 +542,20 @@ def read_screenshot_config(screenshot_config_s, screenshot_config_path, log=None
     parts = screenshot_config_s.split("|")
     if parts[0] == "from-file":
         try:
+            if log:
+                log(f"Trying to read screenshot config: {screenshot_config_path}")
             with open(screenshot_config_path) as f:
                 screenshot_config_s = f.read()
-            if log:
-                log(f"Read screenshot config from here: {screenshot_config_path}")
         except FileNotFoundError:
+            log(f"Failed to read screenshot config: {screenshot_config_path}")
             if len(parts) > 1:
                 screenshot_config_s = parts[1]
             else:
                 # Default default.
                 screenshot_config_s = ":-10:0:0"
+                log(f"Using default screenshot config: {screenshot_config_s}")
+
+    log(f"Found screenshot config: {screenshot_config_s}")
     parts = screenshot_config_s.split(":")
     return int(parts[1]), int(parts[2]), int(parts[3])
 

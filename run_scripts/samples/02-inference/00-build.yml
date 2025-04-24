@@ -7,7 +7,6 @@ epsilon: 0.1
 grid_size: 100
 ---
 
-#
 actions:
 
   # We build two datasets. One to train, one to verify against.

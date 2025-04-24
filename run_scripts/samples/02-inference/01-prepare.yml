@@ -1,8 +1,14 @@
 # BINDINGS:
 tps: 1
+use_weights: false
 
 ---
 actions:
   # We access last two datasets built.
   - model prepare --seq-tps {{tps}} --seq-end -1 -d-1
   - model prepare --seq-tps {{tps}} --seq-end -1 -d-2
+
+  {% if use_weights %}
+  - model label -d-2 -k 0.1
+  - model calculate-weights -d-2
+  {% endif %}

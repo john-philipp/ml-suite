@@ -23,6 +23,12 @@ class ParserModelLabel(_Parser):
             action="store_true")
 
         parser.add_argument(
+            "--kill-after", "-k",
+            help="Kill labeler after seconds.",
+            default=0,
+            type=float)
+
+        parser.add_argument(
             "--write-screenshot-config", "-w",
             help="Write screenshot config to file.",
             action="store_true")

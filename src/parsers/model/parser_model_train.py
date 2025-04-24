@@ -25,8 +25,8 @@ class ParserModelTrain(_Parser):
 
         parser.add_argument(
             "--weights-index", "-w",
-            help="Use these weights (-1 == defaults) (default=%(default)s).",
-            default=-1,
+            help="Use these weights (0 == defaults) (default=%(default)s).",
+            default=0,
             type=int)
 
         parser.add_argument(
