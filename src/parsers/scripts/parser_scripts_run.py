@@ -25,6 +25,11 @@ class ParserScriptsRun(_Parser):
             action="store_true")
 
         parser.add_argument(
+            "--local-paths", "-l",
+            help="Nested script references are local.",
+            action="store_true")
+
+        parser.add_argument(
             "--range", "-r",
             help="Only execute steps in range 'start:end' (starts at 0) (default=%(default)s).",
             default="0:")

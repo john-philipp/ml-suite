@@ -12,20 +12,18 @@ bins_n: 200
 grid_size: 100
 use_weights: false
 ---
-bindings_str:
----
 actions:
   {% for epsilon in epsilons %}
-  - scripts run -s run_scripts/samples/02-inference/00-build.yml -b build:true:bool bins_n:{{bins_n}}:int epsilon:{{epsilon}}:float grid_size:{{grid_size}}:int
+  - scripts run -ls 00-build.yml -b build:true:bool bins_n:{{bins_n}}:int epsilon:{{epsilon}}:float grid_size:{{grid_size}}:int
   {% for points in points_ %}
   {% for neighbors in neighbors_ %}
-  - scripts run -s run_scripts/samples/02-inference/01-prepare.yml -b use_weights:{{use_weights}}:bool
+  - scripts run -ls 01-prepare.yml -b use_weights:{{use_weights}}:bool
   {% for cycle in range(cycles) %}
   - misc echo -m "Starting cycle {{cycle + 1}}/{{cycles}}..."
   {% if cycle == 0 %}
-  - scripts run -s run_scripts/samples/02-inference/02-train-and-inference.yml -b use_weights:{{use_weights}}:bool points:{{points}}:int neighbors:{{neighbors}}:int epsilon:{{epsilon}}:float
+  - scripts run -ls 02-train-and-inference.yml -b use_weights:{{use_weights}}:bool points:{{points}}:int neighbors:{{neighbors}}:int epsilon:{{epsilon}}:float
   {% else %}
-  - scripts run -s run_scripts/samples/02-inference/02-train-and-inference.yml -b use_weights:{{use_weights}}:bool points:{{points}}:int neighbors:{{neighbors}}:int epsilon:{{epsilon}}:float train_into:true:bool
+  - scripts run -ls 02-train-and-inference.yml -b use_weights:{{use_weights}}:bool points:{{points}}:int neighbors:{{neighbors}}:int epsilon:{{epsilon}}:float train_into:true:bool
   {% endif %}
   {% endfor %}
   {% endfor %}

@@ -1,2 +1,2 @@
 actions:
-  - scripts run -s run_scripts/samples/01-nested-script/00-nested-script.yml
+  - scripts run -ls 00-nested-script.yml

@@ -18,6 +18,7 @@ class HandlerScriptsRun(_Handler):
             self.bindings_json = args.bindings_json
             self.range = args.range
             self.from_stdin = args.from_stdin
+            self.local_paths = args.local_paths
 
     class Script:
         def __init__(self, actions, **_):
@@ -56,6 +57,12 @@ class HandlerScriptsRun(_Handler):
                 if os.path.isdir(script_path):
                     script_path += "/_run.yml"
                 mark_path(".", "script", uid="_".join(script_path.split("/")[1:]), truncate=None)
+
+            script_dir = os.path.dirname(script_path)
+            if GLOBALS.nested_level == 0:
+                GLOBALS.set_script_dir(script_dir)
+            elif args.local_paths:
+                script_path = os.path.join(GLOBALS.script_dir, script_path)
 
             script = JinjaYamlLoader(script_path, HandlerScriptsRun.Script).load(yaml_string=yaml_string, **bindings)
 

@@ -8,6 +8,7 @@ logging.basicConfig(level=logging.INFO)
 class Globals:
     nested_level = 0
     app_name = APP_NAME
+    script_dir = "."
     log = _log
 
     def nest(self):
@@ -16,6 +17,9 @@ class Globals:
     def denest(self):
         if self.nested_level != 0:
             self.nested_level -= 1
+
+    def set_script_dir(self, script_dir):
+        self.script_dir = script_dir
 
 
 GLOBALS = Globals()
